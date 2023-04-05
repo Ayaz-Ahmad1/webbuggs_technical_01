@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import ProductCategoryListCreateAPIView, ProductCategoryUpdateDestroyAPIView, SubCategoryListCreateAPIView, SubCategoryUpdateDestroyAPIView, ColorListCreateAPIView, ColorUpdateDestroyAPIView, ProductListCreateAPIView, ProductUpdateDestroyAPIView,GetSingleProductWithDetail
-from .views import TopCategoriesAPIView
+from .views import ProductSearchAPIView, TopCategoriesAPIView, ProductCategoryListCreateAPIView, ProductCategoryUpdateDestroyAPIView, SubCategoryListCreateAPIView, SubCategoryUpdateDestroyAPIView, ColorListCreateAPIView, ColorUpdateDestroyAPIView, ProductListCreateAPIView, ProductUpdateDestroyAPIView,GetSingleProductWithDetail
 
 urlpatterns = [
 
@@ -34,4 +33,6 @@ path('products/update-delete/<int:id>/', ProductUpdateDestroyAPIView.as_view(), 
 
 
 path('top-categories/', TopCategoriesAPIView.as_view(), name='top_categories'),
+path('search/', ProductSearchAPIView.as_view(), name='search'),
+
 ]
