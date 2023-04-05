@@ -12,6 +12,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from django.db.models import Count
+from django.db.models import Q
+from django.http import Http404
 
 
 # ProductCategory retrieve, list and create (any authorized user).
@@ -152,3 +154,30 @@ class TopCategoriesAPIView(GenericAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    
+   
+class ProductSearchAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 1
+
+    
+    def get_queryset(self):
+        search_query = self.request.query_params.get('q', None)
+        queryset = (
+            Product.objects.filter(
+                Q(title__icontains=search_query)
+                | Q(sku__icontains=search_query)
+                | Q(description__icontains=search_query)
+            )
+            if search_query
+            else Http404("No products found for the given search query.")
+        )
+            
+        if not queryset.exists():
+            raise Http404("No products found for the given search query.")
+        return queryset
+
+
+   
